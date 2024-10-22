@@ -23,7 +23,7 @@ export class TodoPage extends BasePage {
 
   async completeTask(taskName: string): Promise<void> {
     // Esperar a que el elemento esté visible antes de hacer clic
-    const taskLocator = this.page.locator('span').filter({ hasText: `check_box_outline_blank ${taskName}` }).locator('i');
+    const taskLocator = this.page.locator('span').filter({ hasText: `${taskName}` }).locator('i');
     await taskLocator.click(); // Hacer clic en el elemento
     await this.page.waitForTimeout(1000); // Espera 1 segundo para ver el paso
   }
