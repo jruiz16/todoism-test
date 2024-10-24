@@ -8,7 +8,7 @@ export class LoginPage extends BasePage {
   }
 
   async navigate(): Promise<void> {
-    await this.navigateTo(this.url);
+    await this.page.goto(this.url);
   }
 
   async navigateToLogin(): Promise<void> {
