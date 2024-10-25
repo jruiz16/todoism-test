@@ -1,37 +1,30 @@
-import { BasePage } from './BasePage';
+import { expect, Locator, Page } from "@playwright/test";
 
-export class LoginPage extends BasePage {
-  private readonly url: string = 'http://127.0.0.1:5000/';
+export class LoginPage{
 
-  constructor(page) {
-    super(page);
-  }
+    readonly page: Page;
+    readonly getATestAccountButton: Locator;
+    readonly loginButton: Locator;
+    readonly userNameInput: Locator;
 
-  async navigate(): Promise<void> {
-    await this.page.goto(this.url);
-  }
+    readonly GER_AT_TEXT_ACCOUNT_TEXT_SELECTOR = 'Get a test account';
+    readonly LOGIN_BUTTON_ID_SELECTOR = '#login-btn';
+    readonly USERNAME_BUTTON_ID_SELECTOR = '#username-input';
 
-  async navigateToLogin(): Promise<void> {
-    await this.page.getByRole('navigation').getByRole('link', { name: 'Login' }).click();
-  }
+    constructor(page){
+        this.page = page;
+        this.getATestAccountButton = page.getByText(this.GER_AT_TEXT_ACCOUNT_TEXT_SELECTOR);
+        this.loginButton = page.locator(this.LOGIN_BUTTON_ID_SELECTOR);
+        this.userNameInput = page.locator(this.USERNAME_BUTTON_ID_SELECTOR);
+    }
 
-  async getUserTest(): Promise<void> {
-    await this.page.getByText('Get a test account').click();
-    await this.page.waitForFunction(() => {
-      const input = document.getElementById('username-input') as HTMLInputElement; // Se especifica el tipo
-      return input !== null && input.value !== '';
-    });
-  }
+    clickGetATestAccount = async () => {
+        await this.getATestAccountButton.click();        
+        await expect(this.userNameInput).not.toBeEmpty();
+    }
 
-  async loginIntoPage(): Promise<void> {
-    await this.page.getByText('Login').click();
-  }
+    clickLoginButton = async () => {
+        await this.loginButton.click();
+    }
 
-
-  async login(): Promise<void> {
-    await this.navigate();
-    await this.navigateToLogin();
-    await this.getUserTest();
-    await this.page.locator('#login-btn').click();
-  }
 }
